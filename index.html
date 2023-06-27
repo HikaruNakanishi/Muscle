@@ -22,24 +22,24 @@
       let startValue = 0;
       let isAct = false;
 
-      outputDiv.innerHTML = "�܂��́A�x���`�v���X�̌��E���L������m�낤�I<br>";
-      outputDiv.innerHTML += "1���b�v�グ�Ă݂悤�B�グ�ꂽ��A" + MIN_PLATE_VALUE + "kg�ǉ����ďグ�Ď����̌��E��m�낤�I�I<br>";
+      outputDiv.innerHTML = "まずは、ベンチプレスの限界何キロ数を知ろう！<br>";
+      outputDiv.innerHTML += "1レップ上げてみよう。上げれたら、" + MIN_PLATE_VALUE + "kg追加して上げて自分の限界を知ろう！！<br>";
 
       do {
         isAct = false;
-        startValue = parseInt(prompt("�x���`�v���X���L������X�^�[�g���܂����H"));
+        startValue = parseInt(prompt("ベンチプレス何キロからスタートしますか？"));
 
         if (startValue < 20) {
-          outputDiv.innerHTML = "�x���`�v���X�̓o�[�x����20kg������A�x���`�v���X�͏o���Ȃ��B���߂�ˁB<br>����Ƀ_���x���������ă_���x���v���X�����悤�I";
+          outputDiv.innerHTML = "ベンチプレスはバーベルが20kgだから、ベンチプレスは出来ない。ごめんね。<br>代わりにダンベルを持ってダンベルプレスをしよう！";
           return;
         }
         if (startValue % MIN_PLATE_VALUE !== 0) {
-          outputDiv.innerHTML = "�x���`�v���X��" + MIN_PLATE_VALUE + "kg�̔{������Ȃ��ƃv���[�g���Ȃ��̂�<br>";
+          outputDiv.innerHTML = "ベンチプレスは" + MIN_PLATE_VALUE + "kgの倍数じゃないとプレートがないのさ<br>";
           isAct = true;
         }
       } while (isAct);
 
-      outputDiv.innerHTML += "�x���`�v���X" + startValue + "kg����X�^�[�g���܂��B<br>";
+      outputDiv.innerHTML += "ベンチプレス" + startValue + "kgからスタートします。<br>";
 
       isAct = inputYesOrNo(startValue);
 
@@ -47,7 +47,7 @@
       let maxValue = isAct ? startValue : 0;
 
       while (isAct) {
-        outputDiv.innerHTML += "�ł́A����" + maxTryValue + "kg���グ�Ă݂悤�I<br>";
+        outputDiv.innerHTML += "では、次は" + maxTryValue + "kgを上げてみよう！<br>";
 
         if (inputYesOrNo(maxTryValue)) {
           maxValue = maxTryValue;
@@ -58,15 +58,15 @@
       }
 
       if (maxValue === 0) {
-        outputDiv.innerHTML += "�ŏ��݂͂�ȁA�~�W���R�݂����Ȃ��̂���I���ꂩ��撣�낤�I�I";
+        outputDiv.innerHTML += "最初はみんな、ミジンコみたいなものだよ！これから頑張ろう！！";
         return;
       }
 
       const tryValue = calcTryValue(maxValue, 0);
-      outputDiv.innerHTML += "�x���`�v���X" + maxValue + "kg��MAX�ł����I�i�C�X�I���������E�𒴂��悤<br>";
-      outputDiv.innerHTML += "���E�L��������M���M��5���b�v�グ�邱�Ƃ��o����L�����������v�Z���܂����B<br>";
-      outputDiv.innerHTML += "���̂��Ȃ��́A" + tryValue + "kg��5rep�グ�邱�Ƃ��o���܂��B<br>";
-      outputDiv.innerHTML += "���āA���̃��j���[�́A" + tryValue + "kg��5���b�v5�Z�b�g���悤�I�I";
+      outputDiv.innerHTML += "ベンチプレス" + maxValue + "kgがMAXでした！ナイス！明日も限界を超えよう<br>";
+      outputDiv.innerHTML += "限界キロ数からギリギリ5レップ上げることが出来るキロ数を自動計算しました。<br>";
+      outputDiv.innerHTML += "今のあなたは、" + tryValue + "kgを5rep上げることが出来ます。<br>";
+      outputDiv.innerHTML += "さて、次のメニューは、" + tryValue + "kgを5レップ5セットしよう！！";
     }
 
     function inputYesOrNo(maxTryValue) {
@@ -74,12 +74,12 @@
       let isFool = false;
 
       do {
-        ans = prompt("�x���`�v���X" + maxTryValue + "kg�͎����オ��܂������H\n�����オ�����ꍇ�uy�v\n�����オ��Ȃ������ꍇ�un�v\n����͂��Ă�");
+        ans = prompt("ベンチプレス" + maxTryValue + "kgは持ち上がりましたか？\n持ち上がった場合「y」\n持ち上がらなかった場合「n」\nを入力してね");
 
         if (ans === "y" || ans === "n") {
           isFool = false;
         } else {
-          alert("�uy�v���un�v����͂��Ă��������B");
+          alert("「y」か「n」を入力してください。");
           isFool = true;
         }
       } while (isFool);
@@ -88,10 +88,10 @@
     }
 
     function calcTryValue(maxValue, MODE) {
-      // 5��z��i����񐔕ύX����@�\��ǉ����邩������Ȃ�����ϐ��ɂ��Ă���B�j
+      // 5回想定（今後回数変更する機能を追加するかもしれないから変数にしている。）
       const time = 5;
-      // MODE 0 �� �x���`�v���X�̏ꍇ�W��:40
-      // MODE 1 �� �f�b�h���t�g/�X�N���b�g�̏ꍇ�W��:33.3
+      // MODE 0 → ベンチプレスの場合係数:40
+      // MODE 1 → デッドリフト/スクワットの場合係数:33.3
       const COEFFICIENT = MODE === 0 ? 40 : 33.3;
       const result = Math.floor((COEFFICIENT * maxValue) / (COEFFICIENT + time));
 
