@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bench Press Tracker</title>
+  <style>
+    #bench-press {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="bench-press">
+    <h1>Bench Press Tracker</h1>
+    <img src="bench_press_image.jpg" alt="Bench Press Image">
+    <h3>Enter the initial weight for bench press:</h3>
+    <input type="number" id="weight-input">
+    <button onclick="checkWeight()">Submit</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    let currentWeight = 0;
+
+    function checkWeight() {
+      const weightInput = document.getElementById("weight-input");
+      const resultDiv = document.getElementById("result");
+      const weight = parseInt(weightInput.value);
+
+      if (weight > 0) {
+        currentWeight = weight;
+        resultDiv.innerHTML = "Can you lift " + weight + "kg? (Enter 'y' for yes, 'n' for no)";
+        weightInput.value = "";
+        document.getElementById("bench-press").style.backgroundImage = "url(bench_press_" + weight + "kg.jpg)";
+        document.getElementById("bench-press").style.backgroundSize = "contain";
+        document.getElementById("bench-press").style.backgroundRepeat = "no-repeat";
+      } else {
+        resultDiv.innerHTML = "Please enter a valid weight.";
+      }
+    }
+
+    function handleResponse(response) {
+      const resultDiv = document.getElementById("result");
+      const responseValue = response.toLowerCase();
+
+      if (responseValue === "y") {
+        currentWeight += 2.5;
+        resultDiv.innerHTML = "Great! You lifted " + currentWeight + "kg. Can you lift it again? (Enter 'y' for yes, 'n' for no)";
+      } else if (responseValue === "n") {
+        const estimatedMax = currentWeight + 5;
+        resultDiv.innerHTML = "You couldn't lift the weight. Your estimated one-rep max is " + estimatedMax + "kg.";
+      } else {
+        resultDiv.innerHTML = "Please enter 'y' or 'n'.";
+      }
+    }
+  </script>
+</body>
+</html>
