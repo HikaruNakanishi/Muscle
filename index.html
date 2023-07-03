@@ -15,10 +15,19 @@
 <body>
   <div id="bench-press">
     <h1>Bench Press Tracker</h1>
-    <div id="output"></div>
+    <div id="output">
+	    まずは、ベンチプレスの限界何キロ数を知ろう！<br>
+	    1レップ上げてみよう。上げれたら、" + MIN_PLATE_VALUE + "kg追加して上げて自分の限界を知ろう！！<br>
+    </div>
+    <div id="output2">	    
+    </div>
 		<img class="fit-picture"
 		     src="/Muscle/assets/img/muscle_history000001.jpg"
 		     alt="マッチョの卵達">
+    <div>
+	    <button >あげた</button>
+	    <button >あげてない</button>
+    </div>	
   </div>
 
   <script>
@@ -27,29 +36,25 @@
     function main() {
       const outputDiv = document.getElementById("output");
       let startValue = 0;
-      let isAct = false;
 
-      outputDiv.innerHTML = "まずは、ベンチプレスの限界何キロ数を知ろう！<br>";
-      outputDiv.innerHTML += "1レップ上げてみよう。上げれたら、" + MIN_PLATE_VALUE + "kg追加して上げて自分の限界を知ろう！！<br>";
-
+      let promptMessage = "ベンチプレス何キロからスタートしますか？";
       do {
-        isAct = false;
-        startValue = parseInt(prompt("ベンチプレス何キロからスタートしますか？"));
+        startValue = parseInt(prompt(promptMessage));
 
         if (startValue < 20) {
-          outputDiv.innerHTML = "ベンチプレスはバーベルが20kgだから、ベンチプレスは出来ない。ごめんね。<br>代わりにダンベルを持ってダンベルプレスをしよう！";
-          return;
+	  document.getElementById("output2").innerHTML = "ベンチプレスはバーベルが20kgだから、ベンチプレスは出来ない。ごめんね。<br>代わりにダンベルを持ってダンベルプレスをしよう！";
+          break;
         }
         if (startValue % MIN_PLATE_VALUE !== 0) {
-          outputDiv.innerHTML = "ベンチプレスは" + MIN_PLATE_VALUE + "kgの倍数じゃないとプレートがないのさ<br>";
-          isAct = true;
+	  promptMessage = "ベンチプレスは" + MIN_PLATE_VALUE + "kgの倍数じゃないとプレートがないのさ<br>";
+	  continue;
         }
-      } while (isAct);
+	break;	
+      } while (true);
 
       outputDiv.innerHTML += "ベンチプレス" + startValue + "kgからスタートします。<br>";
-
-      isAct = inputYesOrNo(startValue);
-
+     
+      let isAct = inputYesOrNo(startValue);
       let maxTryValue = startValue + MIN_PLATE_VALUE;
       let maxValue = isAct ? startValue : 0;
 
