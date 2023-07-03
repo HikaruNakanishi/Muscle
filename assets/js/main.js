@@ -1,0 +1,83 @@
+main();
+
+const MIN_PLATE_VALUE = 2.5;
+  function main() {
+    const outputDiv = document.getElementById("output");
+    let startValue = 0;
+    let isAct = false;
+
+    outputDiv.innerHTML = "まずは、ベンチプレスの限界何キロ数を知ろう！<br>";
+    outputDiv.innerHTML += "1レップ上げてみよう。上げれたら、" + MIN_PLATE_VALUE + "kg追加して上げて自分の限界を知ろう！！<br>";
+
+    do {
+      isAct = false;
+      startValue = parseInt(prompt("ベンチプレス何キロからスタートしますか？"));
+
+      if (startValue < 20) {
+        outputDiv.innerHTML = "ベンチプレスはバーベルが20kgだから、ベンチプレスは出来ない。ごめんね。<br>代わりにダンベルを持ってダンベルプレスをしよう！";
+        return;
+      }
+      if (startValue % MIN_PLATE_VALUE !== 0) {
+        outputDiv.innerHTML = "ベンチプレスは" + MIN_PLATE_VALUE + "kgの倍数じゃないとプレートがないのさ<br>";
+        isAct = true;
+      }
+    } while (isAct);
+
+    outputDiv.innerHTML += "ベンチプレス" + startValue + "kgからスタートします。<br>";
+
+    isAct = inputYesOrNo(startValue);
+
+    let maxTryValue = startValue + MIN_PLATE_VALUE;
+    let maxValue = isAct ? startValue : 0;
+
+    while (isAct) {
+      outputDiv.innerHTML += "では、次は" + maxTryValue + "kgを上げてみよう！<br>";
+
+      if (inputYesOrNo(maxTryValue)) {
+        maxValue = maxTryValue;
+        maxTryValue += MIN_PLATE_VALUE;
+      } else {
+        isAct = false;
+      }
+    }
+
+    if (maxValue === 0) {
+      outputDiv.innerHTML += "最初はみんな、ミジンコみたいなものだよ！これから頑張ろう！！";
+      return;
+    }
+
+    const tryValue = calcTryValue(maxValue, 0);
+    outputDiv.innerHTML += "ベンチプレス" + maxValue + "kgがMAXでした！ナイス！明日も限界を超えよう<br>";
+    outputDiv.innerHTML += "限界キロ数からギリギリ5レップ上げることが出来るキロ数を自動計算しました。<br>";
+    outputDiv.innerHTML += "今のあなたは、" + tryValue + "kgを5rep上げることが出来ます。<br>";
+    outputDiv.innerHTML += "さて、次のメニューは、" + tryValue + "kgを5レップ5セットしよう！！";
+  }
+
+  function inputYesOrNo(maxTryValue) {
+    let ans = null;
+    let isFool = false;
+
+    do {
+      ans = prompt("ベンチプレス" + maxTryValue + "kgは持ち上がりましたか？\n持ち上がった場合「y」\n持ち上がらなかった場合「n」\nを入力してね");
+
+      if (ans === "y" || ans === "n") {
+        isFool = false;
+      } else {
+        alert("「y」か「n」を入力してください。");
+        isFool = true;
+      }
+    } while (isFool);
+
+    return ans === "y";
+  }
+
+  function calcTryValue(maxValue, MODE) {
+    // 5回想定（今後回数変更する機能を追加するかもしれないから変数にしている。）
+    const time = 5;
+    // MODE 0 → ベンチプレスの場合係数:40
+    // MODE 1 → デッドリフト/スクワットの場合係数:33.3
+    const COEFFICIENT = MODE === 0 ? 40 : 33.3;
+    const result = Math.floor((COEFFICIENT * maxValue) / (COEFFICIENT + time));
+
+    return Math.floor(result / MIN_PLATE_VALUE) * MIN_PLATE_VALUE;
+  }
